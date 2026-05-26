@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import { requireRole } from '../middleware/auth.js';
+import { validate } from '../middleware/validate.js';
+import * as c from '../controllers/fleet.controller.js';
+import { busSchema,busUpdateSchema,routeSchema,routeUpdateSchema,scheduleSchema,scheduleUpdateSchema } from '../validators/fleet.validators.js';
+
+const router = Router();
+router.use(requireRole('fleetmanager'));
+router.get('/overview', c.overview);
+router.get('/buses', c.listBuses);
+router.post('/buses', validate(busSchema), c.createBus);
+router.patch('/buses/:id', validate(busUpdateSchema), c.updateBus);
+router.delete('/buses/:id', c.deleteBus);
+router.get('/routes', c.listRoutes);
+router.post('/routes', validate(routeSchema), c.createRoute);
+router.patch('/routes/:id', validate(routeUpdateSchema), c.updateRoute);
+router.delete('/routes/:id', c.deleteRoute);
+router.get('/schedules', c.listSchedules);
+router.post('/schedules', validate(scheduleSchema), c.createSchedule);
+router.patch('/schedules/:id', validate(scheduleUpdateSchema), c.updateSchedule);
+router.delete('/schedules/:id', c.deleteSchedule);
+export default router;

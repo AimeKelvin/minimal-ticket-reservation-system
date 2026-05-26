@@ -1,0 +1,24 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { FleetSidebar } from '../../components/layout/FleetSidebar';
+import { FleetTopbar } from '../../components/layout/FleetTopbar';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Badge } from '../../components/ui/Badge';
+import { Modal } from '../../components/ui/Modal';
+import { Plus, Search, Trash2 } from 'lucide-react';
+import { api } from '../../api/client';
+import toast from 'react-hot-toast';
+
+export function FleetRoutes() {
+  const [routes, setRoutes] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [form, setForm] = useState({ source: '', destination: '', price: 0, status: 'active' });
+  const load = async () => { const res = await api.get('/fleet/routes'); setRoutes(res.data?.data?.routes ?? []); };
+  useEffect(() => { load(); }, []);
+  const filtered = useMemo(() => routes.filter((r) => `${r.source} ${r.destination}`.toLowerCase().includes(search.toLowerCase())), [routes, search]);
+  const save = async (e: React.FormEvent) => { e.preventDefault(); await api.post('/fleet/routes', { ...form, price: Number(form.price) }); toast.success('Route created'); setIsOpen(false); setForm({ source: '', destination: '', price: 0, status: 'active' }); await load(); };
+  const del = async (id: number) => { if (!confirm('Delete this route?')) return; await api.delete(`/fleet/routes/${id}`); toast.success('Route deleted'); await load(); };
+  return <div className="min-h-screen flex bg-canvas"><FleetSidebar /><div className="flex-1 flex flex-col min-w-0"><FleetTopbar /><main className="flex-1 p-8 overflow-y-auto"><div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8"><div><h1 className="text-2xl font-bold text-ink">Routes Management</h1><p className="text-ink-muted mt-1">Create city pairs, pricing, and route status.</p></div><Button onClick={() => setIsOpen(true)}><Plus size={18} className="mr-2" />Add Route</Button></div><Card><div className="p-4 border-b border-border bg-white rounded-t-2xl"><div className="w-full sm:w-80 relative"><Search size={16} className="absolute left-3 top-3 text-ink-subtle" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search routes..." className="w-full h-10 pl-9 rounded-lg border border-border bg-canvas/50 text-sm" /></div></div><div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="border-b border-border bg-canvas/30"><th className="px-6 py-4 text-xs font-semibold text-ink-muted uppercase">Route</th><th className="px-6 py-4 text-xs font-semibold text-ink-muted uppercase">Price</th><th className="px-6 py-4 text-xs font-semibold text-ink-muted uppercase">Status</th><th className="px-6 py-4 text-right text-xs font-semibold text-ink-muted uppercase">Actions</th></tr></thead><tbody className="divide-y divide-border bg-white">{filtered.map((route) => <tr key={route.route_id} className="hover:bg-canvas/50"><td className="px-6 py-4 font-medium text-ink">{route.source} → {route.destination}</td><td className="px-6 py-4 text-ink-muted">{new Intl.NumberFormat('rw-RW', { style: 'currency', currency: 'RWF', maximumFractionDigits: 0 }).format(Number(route.price))}</td><td className="px-6 py-4"><Badge variant={route.status === 'active' ? 'success' : 'default'}>{route.status}</Badge></td><td className="px-6 py-4 text-right"><button onClick={() => del(route.route_id)} className="text-ink-subtle hover:text-danger p-2 rounded-lg hover:bg-danger-soft"><Trash2 size={18} /></button></td></tr>)}{filtered.length === 0 && <tr><td colSpan={4} className="px-6 py-12 text-center text-ink-muted">No routes found.</td></tr>}</tbody></table></div></Card><Modal isOpen={isOpen} onClose={() => setIsOpen(false)}><form onSubmit={save} className="bg-white rounded-2xl border border-border p-6 shadow-card-hover space-y-4"><h2 className="text-xl font-semibold text-ink">Add Route</h2><Input label="Source" value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} required /><Input label="Destination" value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} required /><Input label="Price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} required min={0} /><select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm"><option value="active">Active</option><option value="disabled">Disabled</option></select><Button type="submit" className="w-full">Save route</Button></form></Modal></main></div></div>;
+}
