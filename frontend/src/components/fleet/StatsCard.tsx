@@ -20,21 +20,7 @@ export function StatsCard({ title, value, trend, icon: Icon }: StatsCardProps) {
         </div>
         <div className="flex items-baseline gap-3">
           <h4 className="text-2xl font-bold text-ink">{value}</h4>
-          {trend !== undefined &&
-          <span
-            className={cn(
-              'flex items-center text-xs font-medium',
-              trend >= 0 ? 'text-success' : 'text-danger'
-            )}>
-            
-              {trend >= 0 ?
-            <ArrowUpRight size={14} className="mr-0.5" /> :
 
-            <ArrowDownRight size={14} className="mr-0.5" />
-            }
-              {Math.abs(trend)}%
-            </span>
-          }
         </div>
       </CardContent>
     </Card>);

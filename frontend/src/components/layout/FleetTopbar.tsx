@@ -19,10 +19,7 @@ export function FleetTopbar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="relative text-ink-muted hover:text-ink transition-colors">
-          <Bell size={20} />
-          <span className="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full border border-white" />
-        </button>
+       
 
         <div className="flex items-center gap-3 pl-6 border-l border-border">
           <div className="text-right hidden md:block">
@@ -31,9 +28,7 @@ export function FleetTopbar() {
             </p>
             <p className="text-xs text-ink-muted leading-none">Admin</p>
           </div>
-          <div className="w-9 h-9 rounded-full bg-canvas border border-border flex items-center justify-center">
-            <User size={16} className="text-ink-muted" />
-          </div>
+        
         </div>
       </div>
     </header>);

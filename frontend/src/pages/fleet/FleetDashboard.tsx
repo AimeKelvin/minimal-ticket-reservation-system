@@ -69,17 +69,6 @@ export function FleetDashboard() {
                 trend={4.2}
                 icon={Ticket} />
               
-                <StatsCard
-                title="Occupancy Rate"
-                value={`${stats?.occupancy_rate || 0}%`}
-                trend={-2.1}
-                icon={Users} />
-              
-                <StatsCard
-                title="Fleet Size"
-                value={stats?.buses || 0}
-                icon={Bus} />
-              
               </>
             }
           </div>
@@ -157,34 +146,6 @@ export function FleetDashboard() {
                       </div>
                     </div>
                   )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Alerts */}
-            <Card>
-              <CardHeader className="border-b border-border pb-4">
-                <CardTitle className="flex items-center gap-2">
-                  <AlertCircle size={18} className="text-warning" />
-                  System Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 space-y-4">
-                <div className="p-3 bg-warning-soft border border-warning/20 rounded-xl">
-                  <p className="text-sm font-medium text-warning mb-1">
-                    Maintenance Required
-                  </p>
-                  <p className="text-xs text-warning/80">
-                    Bus RAE 111 D is due for scheduled maintenance tomorrow.
-                  </p>
-                </div>
-                <div className="p-3 bg-canvas border border-border rounded-xl">
-                  <p className="text-sm font-medium text-ink mb-1">
-                    High Demand Route
-                  </p>
-                  <p className="text-xs text-ink-muted">
-                    Kigali → Musanze is at 95% capacity for the next 3 days.
-                  </p>
                 </div>
               </CardContent>
             </Card>

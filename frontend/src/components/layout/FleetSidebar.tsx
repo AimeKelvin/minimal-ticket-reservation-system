@@ -77,13 +77,7 @@ export function FleetSidebar() {
       </div>
 
       <div className="p-4 border-t border-border space-y-1">
-        <Link
-          to="/fleet/settings"
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-ink-muted hover:text-ink hover:bg-canvas/50 transition-colors">
-          
-          <Settings size={18} className="text-ink-subtle" />
-          Settings
-        </Link>
+        
         <button
           onClick={logout}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-ink-muted hover:text-danger hover:bg-danger-soft transition-colors">
